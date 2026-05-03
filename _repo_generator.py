@@ -216,6 +216,77 @@ def write_md5(addons_xml: Path) -> None:
     print(f"[build] {md5_path.relative_to(repo_root())}  ({digest})")
 
 
+def extract_icons() -> None:
+    """
+    Kodi expects each addon's icon.png and fanart.{png,jpg} to be directly
+    accessible at <repo>/<addon_id>/icon.png — not zipped inside the
+    addon. Without this, the addon-info dialog shows broken icons (404s
+    in kodi.log) and dependency resolution can get spooked by the
+    failing fetches. This walks each addon dir, looks at the addon.xml
+    to find the declared icon/fanart paths, and extracts those files
+    from the addon's zip into the repo dir alongside it.
+    """
+    import zipfile
+    root = repo_root()
+    for entry in sorted(root.iterdir()):
+        if not entry.is_dir() or entry.name.startswith((".", "_")):
+            continue
+        addon_xml = entry / "addon.xml"
+        if not addon_xml.exists():
+            continue
+        # Find the addon's zip
+        zips = sorted(entry.glob(f"{entry.name}-*.zip"))
+        if not zips:
+            continue
+        zip_path = zips[-1]   # highest version-sorted zip
+        # Parse declared icon/fanart paths
+        try:
+            xml_root = ET.parse(addon_xml).getroot()
+        except ET.ParseError:
+            continue
+        assets = xml_root.find(".//assets")
+        candidates = []
+        if assets is not None:
+            for el in assets:
+                if el.text:
+                    candidates.append(("declared", el.tag, el.text.strip()))
+        # Always try conventional fallbacks too
+        for tag, fname in (("icon", "icon.png"), ("fanart", "fanart.png"),
+                           ("fanart", "fanart.jpg")):
+            candidates.append(("fallback", tag, fname))
+
+        try:
+            with zipfile.ZipFile(zip_path) as zf:
+                names = zf.namelist()
+                # Most addon zips have a single top-level folder; figure out its name
+                roots = {n.split('/', 1)[0] for n in names if '/' in n}
+                inner = next(iter(roots)) if len(roots) >= 1 else entry.name
+                seen = set()
+                for kind, tag, rel in candidates:
+                    if tag in seen:
+                        continue
+                    arc_path = f"{inner}/{rel}"
+                    if arc_path not in names:
+                        continue
+                    # Extract to a normalized name in the repo dir
+                    out_name = rel if rel in ("icon.png", "fanart.png", "fanart.jpg") \
+                        else os.path.basename(rel)
+                    if out_name not in ("icon.png", "fanart.png", "fanart.jpg"):
+                        # Force standard names for what Kodi looks up
+                        if tag == "icon":
+                            out_name = "icon.png"
+                        elif tag == "fanart":
+                            out_name = "fanart.jpg"
+                    out_path = entry / out_name
+                    with zf.open(arc_path) as src, open(out_path, "wb") as dst:
+                        dst.write(src.read())
+                    seen.add(tag)
+        except Exception as e:
+            print(f"[icons] {entry.name}: extract failed ({e})", file=sys.stderr)
+            continue
+    print(f"[icons] extracted icon/fanart from each addon zip")
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description="Build a Kodi repository.")
     p.add_argument("--github-user", help="Stamp this username into the repo addon URLs.")
@@ -227,6 +298,7 @@ def main() -> int:
     if args.pack:
         pack_addon(args.pack)
 
+    extract_icons()
     addons_xml = build_addons_xml()
     write_md5(addons_xml)
     write_indexes()
