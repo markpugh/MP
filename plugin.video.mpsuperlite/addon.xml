@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mpsuperlite"
+       name="MP SuperLite"
+       version="0.1.0"
+       provider-name="RoloTech">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.resolveurl" version="5.0.38"/>
+        <import addon="script.module.cocoscrapers" version="1.0.32"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_US">Lean playback engine — TMDB metadata, CocoScrapers sources, debrid playback.</summary>
+        <description lang="en_US">MP SuperLite is the playback half of the MP suite. Hand it a TMDB id (movie or episode) and it pulls full metadata from TMDB, scrapes sources via CocoScrapers, ranks them by quality and debrid availability, resolves the top result via ResolveURL, and plays it through Kodi. Real Debrid and AllDebrid auth use device-flow with QR codes — scan with your phone, sign in once, never again. Designed to pair with MP SuperSearch but works standalone with any addon that hands off TMDB ids.</description>
+        <license>GPL-3.0</license>
+        <platform>all</platform>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+        <source>https://github.com/markpugh/MP</source>
+    </extension>
+</addon>

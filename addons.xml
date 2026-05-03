@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
+<addon id="plugin.video.mpsuperlite"
+       name="MP SuperLite"
+       version="0.1.0"
+       provider-name="RoloTech">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.resolveurl" version="5.0.38"/>
+        <import addon="script.module.cocoscrapers" version="1.0.32"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_US">Lean playback engine — TMDB metadata, CocoScrapers sources, debrid playback.</summary>
+        <description lang="en_US">MP SuperLite is the playback half of the MP suite. Hand it a TMDB id (movie or episode) and it pulls full metadata from TMDB, scrapes sources via CocoScrapers, ranks them by quality and debrid availability, resolves the top result via ResolveURL, and plays it through Kodi. Real Debrid and AllDebrid auth use device-flow with QR codes — scan with your phone, sign in once, never again. Designed to pair with MP SuperSearch but works standalone with any addon that hands off TMDB ids.</description>
+        <license>GPL-3.0</license>
+        <platform>all</platform>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+        <source>https://github.com/markpugh/MP</source>
+    </extension>
+</addon>
 <addon id="plugin.video.mpsupersearch"
        name="MP SuperSearch"
-       version="1.0.10"
+       version="1.0.11"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -40,6 +65,54 @@
         <platform>all</platform>
         <license>MIT</license>
         <source>https://github.com/markpugh/MP</source>
+    </extension>
+</addon>
+<addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.32" provider-name="CocoJoe">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+		<import addon="script.module.requests" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="lib/default.py">
+		<provides>executable</provides>
+	</extension> 
+	<extension point="xbmc.service" library="lib/service.py" start="startup" />
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<reuselanguageinvoker>false</reuselanguageinvoker>
+		<summary lang="en">CocoScrapers Module</summary>
+		<description>A module that can be used to provide site scrapers.</description>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<forum></forum>
+		<website></website>
+		<source></source>
+		<disclaimer lang="en">The author is not responsible for the use of this addon. The author is not responsible for the content found using this addon. The author does not host or own any content found within this addon.[CR]The author is in no way affiliated with Kodi, Team Kodi, or the XBMC Foundation.[CR]This is a Non-profit resource, organized solely for educational purposes which is protected under the Fair-Use doctrine of the Copyright Act, Specifically section 107, which does promote freedom of expression, by permitting the unlicensed use of copyright-protected works.</disclaimer>
+		<assets>
+			<icon>icon.png</icon>
+			<fanart>fanart.png</fanart>
+			<screenshot></screenshot>
+		</assets>
+		<news></news>
+	</extension>
+</addon>
+<addon id="script.module.resolveurl" name="ResolveURL" version="5.0.38" provider-name="jsergio">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="plugin.video.youtube" optional="true" />
+        <import addon="script.module.python.twitch" optional="true" />
+        <import addon="script.module.cryptopy" version="1.2.6" optional="true" />
+        <import addon="plugin.video.gdrive" optional="true" />
+    </requires>
+    <extension point="xbmc.python.module" library="lib" />
+    <extension point="xbmc.python.pluginsource" library="lib/default.py" />
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
+        <summary lang="es">Resolver enlaces a videos de sitios populares para poder reproducirlos en XBMC/Kodi.</summary>
+        <summary lang="hr">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju.</summary>
+        <summary lang="el">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi.</summary>
+        <description lang="en">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
+        <description lang="hr">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
     </extension>
 </addon>
 </addons>
