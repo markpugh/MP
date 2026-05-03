@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mpsupersearch"
+       name="MP SuperSearch"
+       version="1.0.6"
+       provider-name="RoloTech">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="plugin.video.themoviedb.helper" version="4.0.0" optional="false"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_US">Granular multi-filter search across TMDB with debrid-backed playback.</summary>
+        <description lang="en_US">Custom search interface with stackable filters: combine genres, networks/streaming services, years, decades, ratings, languages, watch regions, and keywords. Hands off results to TMDB Helper, which routes playback through your configured player addons (Fen Light, Umbrella, POV, etc.). Logos and lists are pulled live from TMDB.</description>
+        <license>MIT</license>
+        <platform>all</platform>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
