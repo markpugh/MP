@@ -192,7 +192,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mpbuild"
        name="MP Build"
-       version="1.2.1"
+       version="1.3.0"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -240,6 +240,30 @@ provider-name="jurialmunkey">
   <disclaimer lang="zh_CN">适用于皮肤设计者</disclaimer>
   <disclaimer lang="fr_FR">Pour les skinners</disclaimer>
   <disclaimer lang="sv_SE">För de som bygger skal</disclaimer>
+  <license>GPL-3.0-or-later</license>
+  <assets>
+    <icon>icon.png</icon>
+    <fanart>fanart.jpg</fanart>
+  </assets>
+</extension>
+</addon>
+<addon id="script.texturemaker"
+version="0.2.10"
+name="Texture Maker"
+provider-name="jurialmunkey">
+<requires>
+  <import addon="xbmc.python" version="3.0.0"/>
+  <import addon="script.module.pil" version="1.1.7"/>
+  <import addon="script.module.jurialmunkey" version="0.1.9" />
+</requires>
+<extension point="xbmc.python.script" library="script.py" />
+<extension point="xbmc.python.pluginsource" library="plugin.py">
+  <provides>image</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Texture Maker helps skinners build gradient based textures</summary>
+  <description lang="en_GB">Texture Maker helps skinners build gradient based textures</description>
+  <disclaimer lang="en_GB">For skinners</disclaimer>
   <license>GPL-3.0-or-later</license>
   <assets>
     <icon>icon.png</icon>
