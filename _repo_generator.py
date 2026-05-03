@@ -287,6 +287,73 @@ def extract_icons() -> None:
     print(f"[icons] extracted icon/fanart from each addon zip")
 
 
+def patch_resolveurl_python_version() -> None:
+    """
+    ResolveURL's upstream addon.xml (still version 5.0.38 as of 2026)
+    declares <import addon="xbmc.python" version="2.1.0" />. Kodi 21 is
+    strict about python version matching and refuses to install addons
+    declaring a major version older than the one it ships (3.x). The fix
+    is purely cosmetic — ResolveURL's actual code runs fine on Python 3.x
+    (Umbrella, Fen, etc. all use it on Kodi 21+). We patch both the mirror
+    addon.xml and the in-zip addon.xml.
+
+    Re-run this any time you swap in a new ResolveURL upstream zip.
+    """
+    import zipfile
+    import shutil
+    addon_dir = repo_root() / "script.module.resolveurl"
+    if not addon_dir.is_dir():
+        return
+    OLD = b'<import addon="xbmc.python" version="2.1.0"'
+    NEW = b'<import addon="xbmc.python" version="3.0.0"'
+
+    # 1. Patch the mirror
+    mirror = addon_dir / "addon.xml"
+    if mirror.exists():
+        data = mirror.read_bytes()
+        if OLD in data:
+            mirror.write_bytes(data.replace(OLD, NEW))
+            print("[patch] resolveurl mirror addon.xml: 2.1.0 -> 3.0.0")
+
+    # 2. Patch the in-zip addon.xml. Repack atomically.
+    zips = sorted(addon_dir.glob("script.module.resolveurl-*.zip"))
+    if not zips:
+        return
+    zpath = zips[-1]
+    needs_patch = False
+    with zipfile.ZipFile(zpath) as zf:
+        for name in zf.namelist():
+            if name.endswith("/addon.xml") or name == "addon.xml":
+                if OLD in zf.read(name):
+                    needs_patch = True
+                    break
+    if not needs_patch:
+        return
+
+    tmp_dir = addon_dir / "_repack_tmp"
+    if tmp_dir.exists():
+        shutil.rmtree(tmp_dir)
+    tmp_dir.mkdir()
+    try:
+        with zipfile.ZipFile(zpath) as zf:
+            zf.extractall(tmp_dir)
+        for inner_xml in tmp_dir.rglob("addon.xml"):
+            d = inner_xml.read_bytes()
+            if OLD in d:
+                inner_xml.write_bytes(d.replace(OLD, NEW))
+        # Repack in place
+        zpath.unlink()
+        with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as zf:
+            for path in sorted(tmp_dir.rglob("*")):
+                if path.is_dir():
+                    continue
+                arcname = path.relative_to(tmp_dir).as_posix()
+                zf.write(path, arcname)
+        print(f"[patch] {zpath.name}: in-zip addon.xml 2.1.0 -> 3.0.0")
+    finally:
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+
+
 def main() -> int:
     p = argparse.ArgumentParser(description="Build a Kodi repository.")
     p.add_argument("--github-user", help="Stamp this username into the repo addon URLs.")
@@ -298,6 +365,7 @@ def main() -> int:
     if args.pack:
         pack_addon(args.pack)
 
+    patch_resolveurl_python_version()
     extract_icons()
     addons_xml = build_addons_xml()
     write_md5(addons_xml)
