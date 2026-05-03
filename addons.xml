@@ -124,4 +124,28 @@
         </assets>
     </extension>
 </addon>
+<addon id="script.mpbuild"
+       name="MP Build"
+       version="1.0.0"
+       provider-name="RoloTech">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">MP Build installer and configurator</summary>
+        <description lang="en_GB">One-click installer for the MP Build: SuperLite playback engine, SuperSearch discovery UI, and pre-configured CocoScrapers + ResolveURL. Run this addon to install everything, authorize Real Debrid / AllDebrid, and tune scraper settings.</description>
+        <platform>all</platform>
+        <license>GPL-3.0-or-later</license>
+        <source>https://github.com/markpugh/MP</source>
+        <website>https://github.com/markpugh/MP</website>
+        <assets>
+            <icon>resources/media/icon.png</icon>
+            <fanart>resources/media/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
 </addons>
