@@ -2,7 +2,7 @@
 <addons>
 <addon id="plugin.video.mpsuperlite"
        name="MP SuperLite"
-       version="0.3.0"
+       version="0.3.1"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
