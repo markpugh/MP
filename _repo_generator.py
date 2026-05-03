@@ -125,6 +125,59 @@ def pack_addon(addon_dir_name: str) -> None:
     print(f"[pack] {out_zip.relative_to(repo_root())}  ({size_kb:.1f} KB)")
 
 
+def _write_index_html(directory: Path, heading: str, skip_names: set) -> None:
+    """Write a simple HTML directory listing Kodi (and browsers) can navigate."""
+    rows = []
+    for p in sorted(directory.iterdir()):
+        if p.name in skip_names or p.name == "index.html":
+            continue
+        if p.name.startswith("."):
+            continue
+        if p.is_dir():
+            # Only list addon dirs (those with addon.xml) at the root level
+            if directory == repo_root() and not (p / "addon.xml").exists():
+                continue
+            rows.append(f'<a href="{p.name}/">{p.name}/</a>')
+        else:
+            rows.append(f'<a href="{p.name}">{p.name}</a>')
+
+    body = "\n".join(f"        {r}<br>" for r in rows)
+    html = f"""<!DOCTYPE html>
+<html><head><title>{heading}</title>
+<style>
+body {{ font-family: ui-monospace, Menlo, Consolas, monospace;
+        background: #f7f7f7; max-width: 760px; margin: 2em auto; padding: 1.5em;
+        background-color: #fff; border: 1px solid #e1e4e8; border-radius: 6px; }}
+h1 {{ font-size: 1.05em; border-bottom: 1px solid #e1e4e8; padding-bottom: .5em; }}
+a {{ display: inline-block; padding: 4px 0; color: #0366d6; text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}
+</style></head><body>
+<h1>Index of {heading}</h1>
+{body}
+</body></html>
+"""
+    (directory / "index.html").write_text(html, encoding="utf-8")
+
+
+def write_indexes() -> None:
+    """Generate index.html files Kodi needs to browse over HTTP."""
+    root = repo_root()
+    _write_index_html(
+        root,
+        "/",
+        skip_names={"_repo_generator.py", "README.md", ".gitignore", ".git"},
+    )
+    count = 1
+    for entry in sorted(root.iterdir()):
+        if not entry.is_dir() or entry.name.startswith((".", "_")):
+            continue
+        if not (entry / "addon.xml").exists():
+            continue
+        _write_index_html(entry, f"/{entry.name}/", skip_names=set())
+        count += 1
+    print(f"[index] wrote {count} index.html files (Kodi browsable)")
+
+
 def build_addons_xml() -> Path:
     root = repo_root()
     out_lines = ['<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', "<addons>"]
@@ -176,6 +229,7 @@ def main() -> int:
 
     addons_xml = build_addons_xml()
     write_md5(addons_xml)
+    write_indexes()
     print("\nDone. Commit, push, and Kodi will see updates on next repo poll.")
     return 0
 
