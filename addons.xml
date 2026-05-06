@@ -138,6 +138,25 @@ provider-name="jurialmunkey">
 		<platform>all</platform>
 	</extension>
 </addon>
+<addon id="script.module.addon.signals"
+    name="Addon Signals"
+    version="0.0.6+matrix.1"
+    provider-name="Rick Phillips (ruuk)">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.module" library="lib" />
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Inter-addon signalling</summary>
+        <description lang="en_GB">Provides signal/slot mechanism for inter-addon communication</description>
+        <platform>all</platform>
+        <license>LGPL-2.1-only</license>
+        <source>https://github.com/ruuk/script.module.addon.signals</source>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+    </extension>
+</addon>
 <addon id="script.module.cocoscrapers" name="CocoScrapers Module" version="1.0.32" provider-name="CocoJoe">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
@@ -166,6 +185,24 @@ provider-name="jurialmunkey">
 		<news></news>
 	</extension>
 </addon>
+<addon id="script.module.infotagger" name="InfoTagger" provider-name="jurialmunkey" version="0.0.8">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+  <extension point="xbmc.python.module" library="resources/modules" />
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">Python wrapper for setInfo on Nexus InfoTags</summary>
+    <description lang="en_GB">Python wrapper for setInfo on Nexus InfoTags</description>
+    <license>GPL-3.0-or-later</license>
+    <website>https://github.com/jurialmunkey/script.module.infotagger</website>
+    <source>https://github.com/jurialmunkey/script.module.infotagger</source>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+
+</addon>
 <addon id="script.module.jurialmunkey" name="jurialmunkey common" provider-name="jurialmunkey" version="0.2.35">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
@@ -178,6 +215,27 @@ provider-name="jurialmunkey">
     <description lang="zh_CN">TMDb 助手及其他相关 jurialmunkey 插件所需的通用代码</description>
     <license>GPL-3.0-or-later</license>
     <website>https://github.com/jurialmunkey/script.module.jurialmunkey</website>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>
+<addon id="script.module.qrcode"
+       name="qrcode"
+       version="6.1.0+matrix.3"
+       provider-name="Lincoln Loop">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.six" version="1.14.0+matrix.1"/>
+    <import addon="script.module.pil" version="1.1.7"/> <!-- Python Image Library required to create QR images -->
+  </requires>
+  <extension point="xbmc.python.module" library="lib" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">QR Code image generator</summary>
+    <description lang="en_GB">This module uses image libraries, Python Imaging Library (PIL) by default, to generate QR Codes.</description>
+    <license>BSD-3-Clause</license>
+    <website>https://pypi.org/project/qrcode/</website>
+    <source>https://github.com/lincolnloop/python-qrcode</source>
     <assets>
       <icon>icon.png</icon>
     </assets>
@@ -214,7 +272,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mpbuild"
        name="MP Build"
-       version="1.5.3"
+       version="1.5.4"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
