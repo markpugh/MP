@@ -214,7 +214,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mpbuild"
        name="MP Build"
-       version="1.5.2"
+       version="1.5.3"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
