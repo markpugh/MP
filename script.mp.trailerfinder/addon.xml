@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.mp.trailerfinder"
+       name="MP Trailer Finder"
+       version="0.1.0"
+       provider-name="Mark Pugh / RoloTech LLC">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="plugin.video.youtube" version="6.8.0" optional="true"/>
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Find and play trailers on YouTube</summary>
+        <description lang="en">Searches YouTube for the official trailer of any movie or TV show and plays it directly via the YouTube addon. Used by MP Build's context menu to provide always-available trailer playback.</description>
+        <license>Proprietary</license>
+        <platform>all</platform>
+        <reuselanguageinvoker>true</reuselanguageinvoker>
+    </extension>
+</addon>
