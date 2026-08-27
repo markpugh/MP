@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.mp.trailerfinder"
        name="MP Trailer Finder"
-       version="0.2.0"
+       version="0.2.1"
        provider-name="Mark Pugh / RoloTech LLC">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>

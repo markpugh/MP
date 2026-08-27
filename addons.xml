@@ -275,7 +275,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mp.trailerfinder"
        name="MP Trailer Finder"
-       version="0.2.0"
+       version="0.2.1"
        provider-name="Mark Pugh / RoloTech LLC">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -297,7 +297,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mpbuild"
        name="MP Build"
-       version="1.6.7"
+       version="1.6.8"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
