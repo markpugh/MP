@@ -1,0 +1,28 @@
+# Kodi verifies addons.xml against addons.xml.md5 before accepting the repo
+# index. The digest is computed over the file's exact bytes, so the working
+# tree, the commit, and what GitHub Pages serves must all agree on line
+# endings. With core.autocrlf=true (the Windows default) git would otherwise
+# normalise these to LF on commit while the local copy stayed CRLF, making
+# the published digest wrong and breaking the repo for every client.
+#
+# Force LF for everything textual, and mark binaries so git never touches
+# them. See write_text_lf() in _repo_generator.py for the other half of this.
+
+* text=auto eol=lf
+
+addons.xml      text eol=lf
+addons.xml.md5  text eol=lf
+*.xml           text eol=lf
+*.html          text eol=lf
+*.py            text eol=lf
+*.md            text eol=lf
+*.txt           text eol=lf
+
+*.zip  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ttf  binary
+*.otf  binary
+*.xbt  binary

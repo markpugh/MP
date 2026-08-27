@@ -58,6 +58,26 @@ REPO_ADDON_ID = "repository.rolotech"
 PLACEHOLDER = "YOUR_GITHUB_USER"
 
 
+def write_text_lf(path: Path, text: str) -> None:
+    """
+    Write UTF-8 with LF line endings, on every platform.
+
+    Path.write_text() opens in text mode with newline=None, which on Windows
+    translates every "\\n" to "\\r\\n". That silently broke the repository:
+    addons.xml was written CRLF, write_md5() hashed those CRLF bytes, but
+    git (core.autocrlf=true) normalised the file back to LF on commit. GitHub
+    then served an LF addons.xml whose real digest did not match the
+    published addons.xml.md5, and Kodi 19+ verifies that digest before
+    accepting the index - so clients rejected the repo with a checksum error.
+
+    Writing LF here keeps the working-tree bytes identical to the committed
+    and served bytes, so the digest is valid end to end. Pair this with the
+    .gitattributes in the repo root, which stops git converting them back.
+    """
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+
+
 def repo_root() -> Path:
     return Path(__file__).resolve().parent
 
@@ -81,7 +101,7 @@ def stamp_github_user(username: str) -> None:
             print("[stamp] no placeholder found, nothing to do.")
         return
     new_text = text.replace(PLACEHOLDER, username)
-    addon_xml.write_text(new_text, encoding="utf-8")
+    write_text_lf(addon_xml, new_text)
     print(f"[stamp] wrote GitHub user '{username}' into {addon_xml.relative_to(repo_root())}")
 
 
@@ -156,7 +176,7 @@ a:hover {{ text-decoration: underline; }}
 {body}
 </body></html>
 """
-    (directory / "index.html").write_text(html, encoding="utf-8")
+    write_text_lf(directory / "index.html", html)
 
 
 def write_indexes() -> None:
@@ -202,7 +222,7 @@ def build_addons_xml() -> Path:
     out_lines.append("</addons>")
     out = "\n".join(out_lines) + "\n"
     addons_xml = root / "addons.xml"
-    addons_xml.write_text(out, encoding="utf-8")
+    write_text_lf(addons_xml, out)
     print(f"[build] {addons_xml.relative_to(root)}  ({len(found)} addons)")
     for aid, ver in found:
         print(f"        - {aid} {ver}")
@@ -212,7 +232,7 @@ def build_addons_xml() -> Path:
 def write_md5(addons_xml: Path) -> None:
     digest = hashlib.md5(addons_xml.read_bytes()).hexdigest()
     md5_path = addons_xml.with_suffix(".xml.md5")
-    md5_path.write_text(digest + "\n", encoding="utf-8")
+    write_text_lf(md5_path, digest + "\n")
     print(f"[build] {md5_path.relative_to(repo_root())}  ({digest})")
 
 
