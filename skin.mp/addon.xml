@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="skin.mp" version="1.1.2" name="MP" provider-name="RoloTech">
+<addon id="skin.mp" version="1.1.3" name="MP" provider-name="RoloTech">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>

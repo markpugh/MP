@@ -2,7 +2,7 @@
 <addons>
 <addon id="plugin.video.mpsuperlite"
        name="MP SuperLite"
-       version="0.7.1"
+       version="0.7.2"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -29,7 +29,7 @@
 </addon>
 <addon id="plugin.video.mpsupersearch"
        name="MP SuperSearch"
-       version="1.7.6"
+       version="1.7.7"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -297,7 +297,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mpbuild"
        name="MP Build"
-       version="1.9.3"
+       version="1.9.4"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -506,7 +506,7 @@ v1.1.3 (2020-10-14)
         </assets>
     </extension>
 </addon>
-<addon id="skin.mp" version="1.1.2" name="MP" provider-name="RoloTech">
+<addon id="skin.mp" version="1.1.3" name="MP" provider-name="RoloTech">
 	<requires>
 		<import addon="xbmc.gui" version="5.17.0"/>
 	</requires>
