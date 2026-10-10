@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="skin.mp" version="1.0.0" name="MP" provider-name="RoloTech">
+	<requires>
+		<import addon="xbmc.gui" version="5.17.0"/>
+	</requires>
+	<extension point="xbmc.gui.skin" debugging="false">
+		<res width="1920" height="1440" aspect="4:3" default="false" folder="xml" />
+		<res width="1920" height="1280" aspect="3:2" default="false" folder="xml" />
+		<res width="1920" height="1200" aspect="16:10" default="false" folder="xml" />
+		<res width="2040" height="1080" aspect="17:9" default="false" folder="xml" />
+		<res width="1920" height="1080" aspect="16:9" default="true" folder="xml" />
+		<res width="2560" height="1080" aspect="21:9" default="false" folder="xml" />
+		<res width="2338" height="1080" aspect="19.5:9" default="false" folder="xml" />
+		<res width="2160" height="1080" aspect="18:9" default="false" folder="xml" />
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<license>CC BY-SA 4.0, GNU GENERAL PUBLIC LICENSE Version 2.0</license>
+		<source>https://github.com/markpugh/MP</source>
+		<website>https://github.com/markpugh/MP</website>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+		</assets>
+		<summary lang="en_GB">MP skin — a minimal launcher skin for the MP Build, built on Estuary.</summary>
+		<summary lang="en_US">MP skin — a minimal launcher skin for the MP Build, built on Estuary.</summary>
+		<description lang="en_GB">The MP Build's own skin. A stripped, branded home that boots straight into MP SuperSearch, with full Kodi settings and dialogs intact underneath. Derived from Kodi's Estuary skin (phil65, Ichabod Fletchman).</description>
+		<description lang="en_US">The MP Build's own skin. A stripped, branded home that boots straight into MP SuperSearch, with full Kodi settings and dialogs intact underneath. Derived from Kodi's Estuary skin (phil65, Ichabod Fletchman).</description>
+	</extension>
+</addon>

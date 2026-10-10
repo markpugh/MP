@@ -88,7 +88,7 @@ def stamp_github_user(username: str) -> None:
     if not addon_xml.exists():
         print(f"[skip stamp] {addon_xml} not found", file=sys.stderr)
         return
-    text = addon_xml.read_text(encoding="utf-8")
+    text = addon_xml.read_text(encoding="utf-8-sig")
     if PLACEHOLDER not in text:
         # Already stamped or someone replaced it manually; sanity-check anyway.
         if username and f"github.io" in text and username not in text:
@@ -210,9 +210,9 @@ def build_addons_xml() -> Path:
         addon_xml = entry / "addon.xml"
         if not addon_xml.exists():
             continue
-        text = addon_xml.read_text(encoding="utf-8")
+        text = addon_xml.read_text(encoding="utf-8-sig")
         # Strip XML prolog if present so we can embed cleanly.
-        text = re.sub(r"^\s*<\?xml.*?\?>\s*", "", text, count=1, flags=re.DOTALL).rstrip()
+        text = re.sub(r"^[\s\ufeff]*<\?xml.*?\?>\s*", "", text, count=1, flags=re.DOTALL).rstrip()
         out_lines.append(text)
         try:
             tag_root = ET.fromstring(text)
