@@ -27,9 +27,10 @@
         <source>https://github.com/markpugh/MP</source>
     </extension>
 </addon>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mpsupersearch"
        name="MP SuperSearch"
-       version="1.7.3"
+       version="1.7.4"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -297,7 +298,7 @@ provider-name="jurialmunkey">
 </addon>
 <addon id="script.mpbuild"
        name="MP Build"
-       version="1.7.1"
+       version="1.8.0"
        provider-name="RoloTech">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>
@@ -307,6 +308,9 @@ provider-name="jurialmunkey">
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>executable</provides>
     </extension>
+    <!-- Startup service: optionally boots into MP SuperSearch behind its
+         splash. Off by default, see resources/settings.xml. -->
+    <extension point="xbmc.service" library="service.py"/>
     <extension point="xbmc.addon.metadata">
         <summary lang="en_GB">MP Build installer and configurator</summary>
         <description lang="en_GB">One-click installer for the MP Build: SuperLite playback engine, SuperSearch discovery UI, and pre-configured CocoScrapers + ResolveURL. Run this addon to install everything, authorize Real Debrid / AllDebrid, and tune scraper settings.</description>
