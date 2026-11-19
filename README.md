@@ -35,11 +35,6 @@ Icons resource packs.
 `repository.rolotech` `1.0.0` — the repo itself (has the GitHub Pages URLs
 baked into its `addon.xml`).
 
-> **Legacy / not part of MP Build:** `skin.arctic.fuse.3`,
-> `script.skinvariables`, `script.texturemaker` are still hosted for older
-> installs but aren't installed by the build. Safe to delete from the repo
-> once nothing on AF3 remains.
-
 ---
 
 ## Install on Kodi (Xbox, desktop, anything — Kodi 21 Omega or newer)
