@@ -1,139 +1,181 @@
-# RoloTech Kodi Repository
+# MP Build — RoloTech Kodi Repository
 
-Self-hosted Kodi addon repository served from GitHub Pages at
-`https://markpugh.github.io/MP/`.
+A self-hosted Kodi add-on repository and one-click build, served from
+GitHub Pages at `https://markpugh.github.io/MP/`.
 
-Currently ships:
-
-- `repository.rolotech` 1.0.0 — the repository addon itself
-- `plugin.video.mpsupersearch` 1.0.6 — MP SuperSearch (granular TMDB filter UI)
+The headline product is the **MP Build**: run one installer add-on and it
+sets up a complete, pre-configured streaming system — a discovery UI, a
+debrid playback engine, the MP skin, and all the supporting modules — then
+walks you through authorizing Real Debrid / AllDebrid / Trakt.
 
 ---
 
-## First-time push
+## What's in the repo
 
-This skeleton is already wired up with your GitHub user (`markpugh`)
-and repo name (`MP`). The repo addon zip and metadata files have
-already been built. You just need to push.
+**The build**
 
-```bash
-cd MP                  # this folder
-git init
-git remote add origin https://github.com/markpugh/MP.git
-git branch -M main
-git add -A
-git commit -m "Initial RoloTech repository"
-git push -u origin main
-```
+| Add-on | ID | Version | Role |
+|---|---|---|---|
+| MP Build | `script.mpbuild` | 1.10.17 | One-click installer + configurator. Run this first. |
+| MP SuperSearch | `plugin.video.mpsupersearch` | 1.8.2 | Discovery UI (granular TMDB filtering). The home screen. |
+| MP SuperLite | `plugin.video.mpsuperlite` | 0.9.1 | Debrid playback engine — scrape, rank, resolve, play, scrobble. |
+| MP skin | `skin.mp` | 1.1.9 | The build's own comic-book skin; boots straight into SuperSearch. |
+| TMDb Helper | `plugin.video.themoviedb.helper` | 6.15.6 | Metadata + episode browsing. |
+| MP Trailer Finder | `script.mp.trailerfinder` | 0.2.2 | Trailers. |
 
-If GitHub rejects the push because the remote already has commits
-(e.g., an auto-created README), pull and rebase first:
+**Supporting modules** (installed automatically by MP Build)
 
-```bash
-git pull --rebase origin main
-git push -u origin main
-```
+CocoScrapers `1.0.32`, ResolveURL `5.1.198`, Up Next `1.1.9`,
+a4kSubtitles `3.24.2`, InfoTagger `0.0.8`, jurialmunkey `0.2.35`,
+Addon Signals `0.0.6`, qrcode `6.1.0`, plus the Studio Icons and Weather
+Icons resource packs.
 
-## Enable GitHub Pages
+**Repository add-on**
 
-In the GitHub web UI:
+`repository.rolotech` `1.0.0` — the repo itself (has the GitHub Pages URLs
+baked into its `addon.xml`).
 
-**Settings → Pages → Source: Deploy from a branch → Branch: `main` →
-Folder: `/ (root)` → Save**
+> **Legacy / not part of MP Build:** `skin.arctic.fuse.3`,
+> `script.skinvariables`, `script.texturemaker` are still hosted for older
+> installs but aren't installed by the build. Safe to delete from the repo
+> once nothing on AF3 remains.
 
-Wait ~30 seconds, then confirm `https://markpugh.github.io/MP/addons.xml`
-loads in a browser. If it does, Kodi will be able to reach it too.
+---
 
-## Install on Kodi (Xbox, desktop, anything)
+## Install on Kodi (Xbox, desktop, anything — Kodi 21 Omega or newer)
 
 1. **Settings → System → Add-ons → Unknown sources → ON**
-2. **Settings → File Manager → Add source**, paste:
-   `https://markpugh.github.io/MP/`
-   Name it `rolotech`.
-3. **Add-ons → Install from zip file → rolotech →
-   `repository.rolotech/` → `repository.rolotech-1.0.0.zip`**
-4. **Add-ons → Install from repository → RoloTech Repository → Video
-   add-ons → MP SuperSearch → Install**
+2. **Settings → File Manager → Add source**, paste
+   `https://markpugh.github.io/MP/` and name it `rolotech`.
+3. **Add-ons → Install from zip file → rolotech → `repository.rolotech/` →
+   `repository.rolotech-1.0.0.zip`**
+4. **Add-ons → Install from repository → RoloTech Repository → Program
+   add-ons → MP Build → Install.**
+5. Open **MP Build** and run it. It installs everything above, then walks
+   you through Real Debrid / AllDebrid / Trakt authorization (QR code, web
+   page, or skip for each).
 
-Done. Kodi polls the repo automatically and offers updates whenever
-you bump a version and push.
+When it finishes you land on the MP skin, booting straight into SuperSearch.
+Kodi polls the repo automatically and offers updates whenever a version is
+bumped and pushed.
 
 ---
 
-## Ongoing: shipping a new MP SuperSearch version
+## How the repo works
 
-When you bump 1.0.6 → 1.0.7:
+Each add-on lives in a top-level folder named after its ID, containing a
+**mirror `addon.xml`** (a copy of the latest version's manifest) and the
+matching **`<id>-<version>.zip`**. The real source lives only inside the zip
+— the folders are publishing stubs.
 
-1. Update `version="1.0.7"` in the addon's source `addon.xml`.
-2. Build the new zip (or drop the source folder in here and use
-   `--pack`).
-3. Place the new zip at:
-   `plugin.video.mpsupersearch/plugin.video.mpsupersearch-1.0.7.zip`
-4. Replace `plugin.video.mpsupersearch/addon.xml` with the new
-   version's manifest. (Automatic if you used `--pack`.)
-5. Rebuild metadata:
+`_repo_generator.py` reads every folder's `addon.xml`, rebuilds the
+top-level `addons.xml` + `addons.xml.md5`, extracts icons, and writes the
+browsable `index.html` pages. Kodi reads `addons.xml` to learn what versions
+exist and downloads the zips on demand.
+
+The MP Build installer pins exact versions in its `INSTALL_ORDER`, so a
+pinned version **must** match the zip present in that add-on's folder, or a
+clean install will 404. Audit the pins after any version bump.
+
+---
+
+## Shipping a new version
+
+Example: bumping MP SuperLite `0.9.1 → 0.9.2`.
+
+1. Bump `version="0.9.2"` in the add-on's source `addon.xml`.
+2. Build the zip. Either drop the source folder in here and let the
+   generator pack it:
+   ```bash
+   python _repo_generator.py --pack plugin.video.mpsuperlite
+   ```
+   or build it yourself and place it at
+   `plugin.video.mpsuperlite/plugin.video.mpsuperlite-0.9.2.zip` with a
+   matching mirror `addon.xml`. The zip's internal root folder must be the
+   add-on ID (`plugin.video.mpsuperlite/...`).
+3. If MP Build pins this add-on, bump the pin in
+   `script.mpbuild` → `resources/lib/installer.py` (`INSTALL_ORDER`) and
+   ship a new MP Build version too.
+4. Rebuild metadata (if you didn't use `--pack`, which runs it for you):
    ```bash
    python _repo_generator.py
    ```
-6. `git add -A && git commit -m "MP SuperSearch 1.0.7" && git push`
+5. Remove the superseded zip, then commit and push:
+   ```bash
+   git add -A && git commit -m "MP SuperLite 0.9.2" && git push
+   ```
 
-Force a Kodi check on any installed device with **Add-ons → Check for
-updates**.
+Force a Kodi check on any installed device with
+**Add-ons → My add-ons → <add-on> → Check for updates**, or restart Kodi.
 
-## Adding a brand-new addon to the repo
+### Adding a brand-new add-on
 
-1. Create a top-level folder named after the addon ID
-   (e.g. `script.rolotech.dashboard/`).
-2. Place the addon's `addon.xml` and a versioned zip inside it.
-3. Run `python _repo_generator.py`.
-4. Commit and push.
-
+Create a top-level folder named after the add-on ID, drop its `addon.xml`
+and a versioned zip inside, run `python _repo_generator.py`, commit, push.
 The generator picks up any subdirectory containing an `addon.xml`.
+
+---
+
+## GitHub Pages
+
+Served from the `main` branch root:
+**Settings → Pages → Source: Deploy from a branch → Branch `main` → Folder
+`/ (root)`**.
+
+After a push, confirm `https://markpugh.github.io/MP/addons.xml` loads in a
+browser — if it does, Kodi can reach it too.
 
 ---
 
 ## Layout
 
 ```
-MP/                                      <-- this repo (markpugh/MP)
+MP/                                        <-- this repo (markpugh/MP)
 ├── _repo_generator.py
 ├── README.md
-├── addons.xml                           <-- generated, committed
-├── addons.xml.md5                       <-- generated, committed
-├── repository.rolotech/
-│   ├── addon.xml                        <-- has GitHub Pages URLs baked in
+├── addons.xml                             <-- generated, committed
+├── addons.xml.md5                         <-- generated, committed
+├── index.html                             <-- generated (browsable listing)
+├── repository.rolotech/                   <-- the repo add-on
+│   ├── addon.xml
 │   ├── icon.png
 │   └── repository.rolotech-1.0.0.zip
-└── plugin.video.mpsupersearch/
-    ├── addon.xml                        <-- mirror of latest version
-    └── plugin.video.mpsupersearch-1.0.6.zip
+├── script.mpbuild/                        <-- the installer
+│   ├── addon.xml                          <-- mirror of latest version
+│   └── script.mpbuild-1.10.17.zip
+├── plugin.video.mpsupersearch/
+├── plugin.video.mpsuperlite/
+├── skin.mp/
+├── plugin.video.themoviedb.helper/
+├── script.mp.trailerfinder/
+└── … supporting modules, one folder each
 ```
+
+Every add-on folder follows the same `addon.xml` + `<id>-<version>.zip`
+shape shown for `repository.rolotech` and `script.mpbuild`.
 
 ---
 
 ## Troubleshooting
 
-**"Could not connect to repository":** GitHub Pages can take a minute
-on first deploy. Open `https://markpugh.github.io/MP/addons.xml` in
-a browser; if it 404s, Pages isn't live yet — wait, retry.
+**"Could not connect to repository":** GitHub Pages can lag a minute on a
+fresh deploy. Open `https://markpugh.github.io/MP/addons.xml` in a browser;
+if it 404s, Pages isn't live yet — wait and retry.
 
-**Repo installs but MP SuperSearch isn't visible in the repo:** Open
-the live `addons.xml` in a browser and confirm both addons are
-listed. If only the repo addon appears, the generator missed the
-plugin folder — confirm `plugin.video.mpsupersearch/addon.xml`
-exists, re-run the generator, push.
+**A clean install 404s on one add-on:** its MP Build pin doesn't match a zip
+in the repo. Confirm `<id>/<id>-<version>.zip` exists for the exact version
+pinned in `installer.py`'s `INSTALL_ORDER`, fix whichever is wrong, re-run
+the generator, push.
 
-**Update not showing after a version bump:** Force it with
-**Add-ons → My add-ons → MP SuperSearch → Check for updates**, or
-restart Kodi. If still missing, open the live `addons.xml` in a
-browser and confirm the new version number is actually there. If not,
-your push didn't include the regenerated metadata.
+**Update not showing after a version bump:** force it with **Add-ons → My
+add-ons → <add-on> → Check for updates**, or restart Kodi. If still missing,
+open the live `addons.xml` in a browser and confirm the new version is
+actually listed — if not, the push didn't include the regenerated metadata.
 
-**Renaming the repo later:** If you ever rename `MP` to something
-else on GitHub, update the three URL lines + `<source>` tag in
-`repository.rolotech/addon.xml`, re-run `--pack repository.rolotech`,
-push.
+**Renaming the repo later:** if `MP` is ever renamed on GitHub, update the
+URL lines + `<source>` tag in `repository.rolotech/addon.xml`, re-run
+`python _repo_generator.py --pack repository.rolotech`, and push.
 
 ---
 
-MIT licensed.
+Add-ons retain their own upstream licenses; repository tooling is MIT.
